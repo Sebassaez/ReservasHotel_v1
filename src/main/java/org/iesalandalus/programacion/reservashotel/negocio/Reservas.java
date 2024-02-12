@@ -7,6 +7,7 @@ import org.iesalandalus.programacion.reservashotel.dominio.Reserva;
 import org.iesalandalus.programacion.reservashotel.dominio.TipoHabitacion;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -165,6 +166,27 @@ public class Reservas {
             }
         }
         return Arrays.copyOf(reservasFuturas, contador);
+    }
+
+    public void realizarCheckin(Reserva reserva, LocalDateTime fecha) {
+        if (reserva == null) {
+            throw new IllegalArgumentException("No se puede realizar check-in para una reserva nula.");
+        }
+        if (fecha == null) {
+            throw new IllegalArgumentException("La fecha de check-in no puede ser nula.");
+        }
+
+        reserva.setCheckin(reserva.getCheckin());
+    }
+
+    public void realizarCheckout(Reserva reserva, LocalDateTime fecha) {
+        if (reserva == null) {
+            throw new IllegalArgumentException("No se puede realizar check-in para una reserva nula.");
+        }
+        if (fecha == null) {
+            throw new IllegalArgumentException("La fecha de check-in no puede ser nula.");
+        }
+        reserva.setCheckout(reserva.getCheckout());
     }
 }
 
