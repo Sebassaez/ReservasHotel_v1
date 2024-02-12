@@ -7,7 +7,9 @@ import org.iesalandalus.programacion.reservashotel.dominio.Regimen;
 import org.iesalandalus.programacion.reservashotel.dominio.Reserva;
 import org.iesalandalus.programacion.utilidades.Entrada;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 
@@ -221,5 +223,27 @@ public class Consola {
             System.out.println("Error: " + e.getMessage());
             throw e;
         }
+    }
+    public static LocalDateTime leerFechaHora(String mensaje) {
+        LocalDateTime fechaHora = null;
+        boolean fechaHoraValida = false;
+
+        do {
+            try {
+                System.out.print(mensaje);
+                String fechaHoraStr = Entrada.cadena();
+
+                if (fechaHoraStr.matches(Reserva.FORMATO_FECHA_RESERVA)) {
+                    fechaHora = LocalDateTime.parse(fechaHoraStr);
+                    fechaHoraValida = true;
+                } else {
+                    System.out.println("Error: Formato de fecha y hora incorrecto. Introduce la fecha y hora en formato (dd/MM/yyyy HH:mm)");
+                }
+            } catch (DateTimeException e) {
+                System.out.println("Error: Formato de fecha y hora incorrecto. Introduce la fecha y hora en formato (dd/MM/yyyy HH:mm)");
+            }
+        } while (!fechaHoraValida);
+
+        return fechaHora;
     }
 }
