@@ -1,16 +1,15 @@
 package org.iesalandalus.programacion.reservashotel.vista;
 
-import org.iesalandalus.programacion.reservashotel.dominio.Huesped;
-import org.iesalandalus.programacion.reservashotel.dominio.Habitacion;
-import org.iesalandalus.programacion.reservashotel.dominio.TipoHabitacion;
-import org.iesalandalus.programacion.reservashotel.dominio.Regimen;
-import org.iesalandalus.programacion.reservashotel.dominio.Reserva;
+import org.iesalandalus.programacion.reservashotel.modelo.dominio.Huesped;
+import org.iesalandalus.programacion.reservashotel.modelo.dominio.Habitacion;
+import org.iesalandalus.programacion.reservashotel.modelo.dominio.TipoHabitacion;
+import org.iesalandalus.programacion.reservashotel.modelo.dominio.Regimen;
+import org.iesalandalus.programacion.reservashotel.modelo.dominio.Reserva;
 import org.iesalandalus.programacion.utilidades.Entrada;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 
 public class Consola {
@@ -138,7 +137,7 @@ public class Consola {
         System.out.print("Número de puerta: ");
         int puerta = Entrada.entero();
 
-        // Crear una instancia de Habitacion ficticia con los datos leídos
+        // Crear una instancia de Habitacion falsa con los datos leídos
         try {
             return new Habitacion(planta, puerta, 80.00, TipoHabitacion.SIMPLE);
         } catch (IllegalArgumentException e) {
@@ -206,7 +205,6 @@ public class Consola {
     public static Reserva leerReserva() {
         System.out.println("Introduce los datos de la reserva:");
 
-        // Obtener datos para la reserva
         Habitacion habitacion = leerHabitacionPorIdentificador();
         LocalDate fechaInicio = leerFecha("Fecha de inicio (dd/MM/yyyy): ");
         LocalDate fechaFin = leerFecha("Fecha de fin (dd/MM/yyyy): ");

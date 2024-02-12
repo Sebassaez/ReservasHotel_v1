@@ -1,6 +1,7 @@
 package org.iesalandalus.programacion.reservashotel.negocio;
 
 
+import org.iesalandalus.programacion.reservashotel.modelo.negocio.Reservas;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

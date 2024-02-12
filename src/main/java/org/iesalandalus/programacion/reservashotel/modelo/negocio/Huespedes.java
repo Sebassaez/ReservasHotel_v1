@@ -1,9 +1,8 @@
-package org.iesalandalus.programacion.reservashotel.negocio;
+package org.iesalandalus.programacion.reservashotel.modelo.negocio;
 
-import org.iesalandalus.programacion.reservashotel.dominio.Huesped;
+import org.iesalandalus.programacion.reservashotel.modelo.dominio.Huesped;
 
 import javax.naming.OperationNotSupportedException;
-import java.util.Arrays;
 
 public class Huespedes {
 
