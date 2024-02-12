@@ -1,17 +1,23 @@
-package org.iesalandalus.programacion.reservashotel;
+package org.iesalandalus.programacion.reservashotel.vista;
+
 import org.iesalandalus.programacion.reservashotel.modelo.dominio.Habitacion;
 import org.iesalandalus.programacion.reservashotel.modelo.dominio.Huesped;
 import org.iesalandalus.programacion.reservashotel.modelo.dominio.Reserva;
 import org.iesalandalus.programacion.reservashotel.modelo.dominio.TipoHabitacion;
-import org.iesalandalus.programacion.reservashotel.vista.Consola;
-import org.iesalandalus.programacion.reservashotel.vista.Opcion;
 import org.iesalandalus.programacion.utilidades.Entrada;
+import org.iesalandalus.programacion.reservashotel.modelo.controlador.Controlador;
+
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainApp {
+public class Vista {
+
+
+
     public static final int CAPACIDAD = 100;
     private Huesped[] huespedes;
     private Habitacion[] habitaciones;
@@ -19,30 +25,31 @@ public class MainApp {
     private int numHuespedes;
     private int numHabitaciones;
     private int numReservas;
-
-    public static void main(String[] args) {
-        MainApp mainApp = new MainApp();
+    private Controlador controlador;
 
 
-        Opcion opcionSeleccionada;
+
+
+    public void setControlador(Controlador controlador) {
+        if (controlador != null) {
+            this.controlador = controlador;
+        } else {
+            throw new IllegalArgumentException("El controlador no puede ser nulo.");
+        }
+    }
+
+    public void comenzar() {
+        Opcion opcionElegida;
         do {
             Consola.mostrarMenu();
-            opcionSeleccionada = Consola.elegirOpcion();
-            mainApp.ejecutarOpcion(opcionSeleccionada);
-        } while (opcionSeleccionada != Opcion.SALIR);
-
-        System.out.println("Â¡Gracias por usar la aplicaciÃ³n de reservas de hotel!");
+            opcionElegida = Consola.elegirOpcion();
+            ejecutarOpcion(opcionElegida);
+        } while (opcionElegida != Opcion.SALIR);
     }
 
-    public MainApp() {
-        huespedes = new Huesped[CAPACIDAD];
-        habitaciones = new Habitacion[CAPACIDAD];
-        reservas = new Reserva[CAPACIDAD];
-        numHuespedes = 0;
-        numHabitaciones = 0;
-        numReservas = 0;
+    public void terminar() {
+        System.out.println("Gracias por utilizar nuestra aplicación de reservas de hotel.");
     }
-
 
     public void ejecutarOpcion(Opcion opcion) {
         switch (opcion) {
@@ -82,12 +89,18 @@ public class MainApp {
             case CONSULTAR_DISPONIBILIDAD:
                 mostrarReservas();
                 break;
+            case REALIZAR_CHECKIN:
+                realizarCheckin();
+                break;
+            case REALIZAR_CHECKOUT:
+                realizarCheckout();
+                break;
             case SALIR:
-                System.out.println("Saliendo de la aplicaciÃ³n. Â¡Hasta luego!");
+                System.out.println("Saliendo de la aplicación. ¡Hasta luego!");
                 System.exit(0);
                 break;
             default:
-                System.out.println("OpciÃ³n no vÃ¡lida.");
+                System.out.println("Opción no válida.");
         }
     }
 
@@ -100,12 +113,12 @@ public class MainApp {
                     if (huespedes[i] == null) {
                         huespedes[i] = nuevoHuesped;
                         numHuespedes++;
-                        System.out.println("HuÃ©sped insertado correctamente.");
+                        System.out.println("Huésped insertado correctamente.");
                         return;
                     }
                 }
             } else {
-                System.out.println("No hay capacidad para mÃ¡s huÃ©spedes.");
+                System.out.println("No hay capacidad para más huéspedes.");
             }
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
@@ -114,7 +127,7 @@ public class MainApp {
 
 
     private void buscarHuesped() {
-        System.out.print("Introduce el DNI del huÃ©sped a buscar: ");
+        System.out.print("Introduce el DNI del huésped a buscar: ");
         String dniBuscar = Entrada.cadena();
 
         Huesped huespedEncontrado = null;
@@ -126,15 +139,15 @@ public class MainApp {
         }
 
         if (huespedEncontrado != null) {
-            System.out.println("HuÃ©sped encontrado:\n" + huespedEncontrado);
+            System.out.println("Huésped encontrado:\n" + huespedEncontrado);
         } else {
-            System.out.println("No se encontrÃ³ un huÃ©sped con ese DNI.");
+            System.out.println("No se encontró un huésped con ese DNI.");
         }
     }
 
 
     private void borrarHuesped() {
-        System.out.print("Introduce el DNI del huÃ©sped a borrar: ");
+        System.out.print("Introduce el DNI del huésped a borrar: ");
         String dniBorrar = Entrada.cadena();
         boolean huespedBorrado = false;
 
@@ -148,23 +161,23 @@ public class MainApp {
         }
 
         if (huespedBorrado) {
-            System.out.println("HuÃ©sped borrado correctamente.");
+            System.out.println("Huésped borrado correctamente.");
         } else {
-            System.out.println("No se encontrÃ³ un huÃ©sped con ese DNI.");
+            System.out.println("No se encontró un huésped con ese DNI.");
         }
     }
 
 
     private void mostrarHuespedes() {
         if (getNumElementosNoNulos(huespedes) > 0) {
-            System.out.println("Listado de HuÃ©spedes:");
+            System.out.println("Listado de Huéspedes:");
             for (Huesped huesped : huespedes) {
                 if (huesped != null) {
                     System.out.println(huesped);
                 }
             }
         } else {
-            System.out.println("No hay huÃ©spedes registrados.");
+            System.out.println("No hay huéspedes registrados.");
         }
     }
 
@@ -175,16 +188,16 @@ public class MainApp {
         if (getNumElementosNoNulos(habitaciones) < CAPACIDAD) {
             habitaciones[numHabitaciones] = nuevaHabitacion;
             numHabitaciones++;
-            System.out.println("HabitaciÃ³n insertada correctamente.");
+            System.out.println("Habitación insertada correctamente.");
         } else {
-            System.out.println("No hay capacidad para mÃ¡s habitaciones.");
+            System.out.println("No hay capacidad para más habitaciones.");
         }
     }
 
     private void buscarHabitacion() {
-        System.out.print("Introduce el nÃºmero de puerta de la habitaciÃ³n a buscar: ");
+        System.out.print("Introduce el número de puerta de la habitación a buscar: ");
         int puertaBuscar = Entrada.entero();
-        System.out.print("Introduce el nÃºmero de planta de la habitaciÃ³n a buscar: ");
+        System.out.print("Introduce el número de planta de la habitación a buscar: ");
         int plantaBuscar = Entrada.entero();
         Habitacion habitacionEncontrada = null;
 
@@ -197,16 +210,16 @@ public class MainApp {
         }
 
         if (habitacionEncontrada != null) {
-            System.out.println("HabitaciÃ³n encontrada:\n" + habitacionEncontrada);
+            System.out.println("Habitación encontrada:\n" + habitacionEncontrada);
         } else {
-            System.out.println("No se encontrÃ³ una habitaciÃ³n con ese nÃºmero de puerta y planta.");
+            System.out.println("No se encontró una habitación con ese número de puerta y planta.");
         }
     }
 
     private void borrarHabitacion() {
-        System.out.print("Introduce el nÃºmero de puerta de la habitaciÃ³n a borrar: ");
+        System.out.print("Introduce el número de puerta de la habitación a borrar: ");
         int puertaBorrar = Entrada.entero();
-        System.out.print("Introduce el nÃºmero de planta de la habitaciÃ³n a borrar: ");
+        System.out.print("Introduce el número de planta de la habitación a borrar: ");
         int plantaBorrar = Entrada.entero();
         boolean habitacionBorrada = false;
 
@@ -221,9 +234,9 @@ public class MainApp {
         }
 
         if (habitacionBorrada) {
-            System.out.println("HabitaciÃ³n borrada correctamente.");
+            System.out.println("Habitación borrada correctamente.");
         } else {
-            System.out.println("No se encontrÃ³ una habitaciÃ³n con ese nÃºmero de puerta y planta.");
+            System.out.println("No se encontró una habitación con ese número de puerta y planta.");
         }
     }
 
@@ -250,14 +263,14 @@ public class MainApp {
             numReservas++;
             System.out.println("Reserva insertada correctamente.");
         } else {
-            System.out.println("No hay capacidad para mÃ¡s reservas o no hay disponibilidad en el perÃ­odo indicado.");
+            System.out.println("No hay capacidad para más reservas o no hay disponibilidad en el período indicado.");
         }
     }
 
 
 
     private void listarReservasHuesped() {
-        System.out.print("Introduce el DNI del huÃ©sped para listar sus reservas: ");
+        System.out.print("Introduce el DNI del huésped para listar sus reservas: ");
         String dniBuscar = Entrada.cadena();
 
         for (Reserva reserva : reservas) {
@@ -293,20 +306,20 @@ public class MainApp {
     }
 
     private void anularReserva() {
-        System.out.print("Introduce el DNI del huÃ©sped para anular una reserva: ");
+        System.out.print("Introduce el DNI del huésped para anular una reserva: ");
         String dniBuscar = Entrada.cadena();
         Reserva[] reservasAnulables = getReservasAnulables(dniBuscar);
 
         if (reservas.length == 0) {
-            System.out.println("No hay reservas anulables para ese huÃ©sped.");
+            System.out.println("No hay reservas anulables para ese huésped.");
         } else if (reservasAnulables.length == 1) {
-            System.out.print("Â¿Desea anular la siguiente reserva? (S/N)\n" + reservas[0]);
+            System.out.print("¿Desea anular la siguiente reserva? (S/N)\n" + reservas[0]);
             char opcion = Entrada.caracter();
             if (opcion == 'S' || opcion == 's') {
                 anularReserva();
-                System.out.println("Reserva anulada con Ã©xito.");
+                System.out.println("Reserva anulada con éxito.");
             } else {
-                System.out.println("AnulaciÃ³n de reserva cancelada.");
+                System.out.println("Anulación de reserva cancelada.");
             }
         } else {
             System.out.println("Seleccione la reserva a anular (1-" + reservasAnulables.length + "):");
@@ -316,9 +329,9 @@ public class MainApp {
             int opcion = Entrada.entero();
             if (opcion >= 1 && opcion <= reservasAnulables.length) {
                 anularReserva();
-                System.out.println("Reserva anulada con Ã©xito.");
+                System.out.println("Reserva anulada con éxito.");
             } else {
-                System.out.println("OpciÃ³n no vÃ¡lida. AnulaciÃ³n de reserva cancelada.");
+                System.out.println("Opción no válida. Anulación de reserva cancelada.");
             }
         }
     }
@@ -366,6 +379,90 @@ public class MainApp {
         return true;
     }
 
+    public void realizarCheckin() {
+        System.out.print("Introduce el DNI del huésped para realizar el check-in: ");
+        String dni = Entrada.cadena();
 
+        List<Reserva> reservasHuesped = new ArrayList<>();
+        for (Reserva reserva : reservas) {
+            if (reserva != null && reserva.getHuesped().getDni().equals(dni)) {
+                reservasHuesped.add(reserva);
+            }
+        }
+
+        if (reservasHuesped.isEmpty()) {
+            System.out.println("El huésped no tiene reservas para realizar el check-in.");
+            return;
+        }
+
+        System.out.println("Reservas del huésped:");
+        for (int i = 0; i < reservasHuesped.size(); i++) {
+            System.out.println((i + 1) + ". " + reservasHuesped.get(i));
+        }
+
+        System.out.print("Selecciona el número de reserva para realizar el check-in: ");
+        int opcion = Entrada.entero();
+        if (opcion < 1 || opcion > reservasHuesped.size()) {
+            System.out.println("Opción no válida.");
+            return;
+        }
+
+        Reserva reservaSeleccionada = reservasHuesped.get(opcion - 1);
+
+        LocalDateTime fechaActual = LocalDateTime.now();
+        if (!reservaSeleccionada.getFechaInicioReserva().equals(fechaActual.toLocalDate())) {
+            System.out.println("La reserva no es para el día actual, no se puede realizar el check-in.");
+            return;
+        }
+
+        reservaSeleccionada.getCheckin();
+        controlador.realizarCheckin(reservaSeleccionada, fechaActual);
+        System.out.println("Check-in realizado con éxito para la reserva:\n" + reservaSeleccionada);
+    }
+
+
+
+    private void realizarCheckout() {
+        System.out.print("Introduce el DNI del huésped para realizar el check-out: ");
+        String dni = Entrada.cadena();
+
+        List<Reserva> reservasHuesped = new ArrayList<>();
+        for (Reserva reserva : reservas) {
+            if (reserva != null && reserva.getHuesped().getDni().equals(dni)) {
+                reservasHuesped.add(reserva);
+            }
+        }
+
+        if (reservasHuesped.isEmpty()) {
+            System.out.println("El huésped no tiene reservas para realizar el check-out.");
+            return;
+        }
+
+        System.out.println("Reservas del huésped:");
+        for (int i = 0; i < reservasHuesped.size(); i++) {
+            System.out.println((i + 1) + ". " + reservasHuesped.get(i));
+        }
+
+        System.out.print("Selecciona el número de reserva para realizar el check-out: ");
+        int opcion = Entrada.entero();
+        if (opcion < 1 || opcion > reservasHuesped.size()) {
+            System.out.println("Opción no válida.");
+            return;
+        }
+
+        Reserva reservaSeleccionada = reservasHuesped.get(opcion - 1);
+
+        LocalDateTime fechaActual = LocalDateTime.now();
+        if (reservaSeleccionada.getFechaFinReserva().isBefore(ChronoLocalDate.from(fechaActual.toLocalDate().atStartOfDay()))) {
+            System.out.println("La reserva ya ha pasado su fecha de finalización.");
+            return;
+        }
+
+        reservaSeleccionada.getCheckout();
+        controlador.realizarCheckout(reservaSeleccionada, fechaActual);
+        System.out.println("Check-out realizado con éxito para la reserva:\n" + reservaSeleccionada);
+    }
 
 }
+
+
